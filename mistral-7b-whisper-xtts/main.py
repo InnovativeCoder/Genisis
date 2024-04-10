@@ -1,5 +1,21 @@
 import whisper
 import requests
+import torch
+from TTS.api import TTS
+import json
+
+#todo - pyAudio get the mic source and destination
+
+# Get device
+device = "cuda" if torch.cuda.is_available() else "cpu"
+
+# List available 🐸TTS models
+print(TTS().list_models())
+
+# Init TTS
+tts = TTS("tts_models/multilingual/multi-dataset/xtts_v2").to(device)
+wav = tts.tts(text="Hello world!", speaker_wav="./bark_out.wav", language="en")
+
 
 modelname = "tiny"
 model = whisper.load_model(modelname)
@@ -27,4 +43,5 @@ try:
 
 except requests.exceptions.RequestException as e:
     print(f"Error during API request: {e}")
+
 
